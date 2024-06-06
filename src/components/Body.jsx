@@ -15,6 +15,7 @@ class Body extends React.Component {
             todos: [],
             userEmail: '',
             searchQuery: '',
+            demoAccount: 'Email : demo@mail.com password: demo'
         };
     }
 
@@ -88,6 +89,7 @@ class Body extends React.Component {
     buildNotLoggedInPage() {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-100">
+                {this.state.demoAccount && SuccessAlert({ message: this.state.demoAccount })}
                 <Auth onLogin={this.handleLogin} />
             </div>
         );
