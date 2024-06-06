@@ -14,6 +14,7 @@ class Body extends React.Component {
             message: '',
             todos: [],
             userEmail: '',
+            searchQuery: '',
         };
     }
 
@@ -28,6 +29,7 @@ class Body extends React.Component {
             message: '',
             todos: [],
             userEmail: '',
+            searchQuery: '',
         });
     };
 
@@ -54,6 +56,17 @@ class Body extends React.Component {
     handleToggleDisable = (id) => {
         const updatedTodo = toggleTodoDisable(id);
         this.setState({ todos: this.state.todos.map(todo => todo.id === id ? updatedTodo : todo) });
+    }
+
+    handleSearch = (e) => {
+        this.setState({ searchQuery: e.target.value });
+    }
+
+    getFilteredTodos = () => {
+        const { todos, searchQuery } = this.state;
+        return todos
+            .filter(todo => todo.text.toLowerCase().includes(searchQuery.toLowerCase()))
+            .sort((a, b) => b.disabled - a.disabled);
     }
 
     componentDidMount() {
@@ -87,9 +100,16 @@ class Body extends React.Component {
                 <div className="card bg-base-100 shadow-xl border border-gray-300">
                     <div className="card-body">
                         <h2 className="card-title">Todo Apps</h2>
+                        <input
+                            type="text"
+                            placeholder="Search Todos"
+                            className="input input-bordered input-primary mb-4"
+                            value={this.state.searchQuery}
+                            onChange={this.handleSearch}
+                        />
                         <TodoForm onAddTodo={this.handleAddTodo} />
                         <TodoList
-                            todos={this.state.todos}
+                            todos={this.getFilteredTodos()}
                             onEdit={this.handleEditTodo}
                             onDelete={this.handleDeleteTodo}
                             onToggleDisable={this.handleToggleDisable}

@@ -1,22 +1,20 @@
-let todos =
-  JSON.parse(localStorage.getItem("todos")) ||
-  [
-    // { id: 1, text: "Learn React", disabled: false },
-    // { id: 2, text: "Build a Todo App", disabled: false },
-  ];
+let todos = JSON.parse(localStorage.getItem("todos")) || [
+  { id: 1, text: "Learn React", disabled: false },
+  { id: 2, text: "Build a Todo App", disabled: false },
+];
 
-const saveTodosToLocalStorage = (todos) => {
+const saveTodos = () => {
   localStorage.setItem("todos", JSON.stringify(todos));
 };
 
 export const getTodos = () => {
-  return todos;
+  return todos.sort((a, b) => b.disabled - a.disabled);
 };
 
 export const addTodo = (text) => {
   const newTodo = { id: Date.now(), text, disabled: false };
   todos.push(newTodo);
-  saveTodosToLocalStorage(todos);
+  saveTodos();
   return newTodo;
 };
 
@@ -24,21 +22,21 @@ export const editTodo = (id, newText) => {
   const todo = todos.find((todo) => todo.id === id);
   if (todo) {
     todo.text = newText;
-    saveTodosToLocalStorage(todos);
+    saveTodos();
   }
   return todo;
 };
 
 export const deleteTodo = (id) => {
   todos = todos.filter((todo) => todo.id !== id);
-  saveTodosToLocalStorage(todos);
+  saveTodos();
 };
 
 export const toggleTodoDisable = (id) => {
   const todo = todos.find((todo) => todo.id === id);
   if (todo) {
     todo.disabled = !todo.disabled;
-    saveTodosToLocalStorage(todos);
+    saveTodos();
   }
   return todo;
 };
